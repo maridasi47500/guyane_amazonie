@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!-- saved from url=(0046)http://gambaswiki.org/wiki/howto/database?l=fr -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <link rel="stylesheet" href="./_howto_database - Documentation de Gambas_files/style.css">
+      <link rel="icon" href="http://gambaswiki.org/wiki/logo.png" type="image/png">
+  <title>/howto/database - Documentation de Gambas</title>
+  <script type="text/javascript" src="./_howto_database - Documentation de Gambas_files/playground.js"></script>
+  </head>
+
+<body>
+
+
+<div id="page-frame">
+<form name="form" method="post" enctype="multipart/form-data">
+
+
+
+<div class="header">
+
+  <div class="header-inside">
+  
+    <div class="header-bar">
+      <div class="up">
+                  <a href="http://gambaswiki.org/wiki?l=fr"><img src="./_howto_database - Documentation de Gambas_files/up.png"></a>
+              </div>
+            <div class="title">
+        <a href="http://gambaswiki.org/wiki/howto?l=fr">howto</a>&nbsp;•&nbsp;<a href="http://gambaswiki.org/wiki/howto/database?l=fr">database</a>      </div>
+                  <div style="float:right;">
+              <div class="command"><input type="submit" name="ident" value="Utilisateur"></div>
+            <select id="lang" name="lang" onchange="document.form.submit();">
+<option value="ar">ar</option>
+<option value="ca">ca</option>
+<option value="cs">cs</option>
+<option value="de">de</option>
+<option value="en">en</option>
+<option value="eo">eo</option>
+<option value="es">es</option>
+<option value="fa">fa</option>
+<option value="fr" selected="">fr</option>
+<option value="hu">hu</option>
+<option value="id">id</option>
+<option value="it">it</option>
+<option value="ja">ja</option>
+<option value="ko">ko</option>
+<option value="mk">mk</option>
+<option value="nl">nl</option>
+<option value="pl">pl</option>
+<option value="pt">pt</option>
+<option value="pt_BR">pt_BR</option>
+<option value="ru">ru</option>
+<option value="sq">sq</option>
+<option value="tr">tr</option>
+<option value="vi">vi</option>
+<option value="zh">zh</option>
+<option value="zh_TW">zh_TW</option>
+</select>
+      </div>
+    </div>
+  </div>
+
+  
+</div>
+
+
+
+<div id="page" class="page">
+
+
+
+      <h1>Comment ouvrir une connection MySQL et l'utiliser</h1>
+<h2>Exemple 1. Créer une nouvelle connexion (MySQL).</h2>
+<h3>Notes :</h3>
+<ul>
+  <li>
+<p>Vous devriez avoir déjà installé le <a href="http://gambaswiki.org/wiki/comp/gb/component?l=fr">Component</a> et tout les paquets en relatifs<br></p></li>
+  <li>
+<p>Ce n'est pas un exemple sur les instructions SQL (MySQL ou autre) <br></p></li>
+  <li>
+<p>Les privilèges dans une base de données sont accordés par l'administrateur MySQL, et ne sont pas contrôlés par Gambas.<br></p></li>
+  <li>
+<p>Le composant <a href="http://gambaswiki.org/wiki/comp/gb.db?l=fr">gb.db</a> doit être sélectionné pour que votre programme puisse accéder au moteur de la base de données.<br></p></li>
+  </ul>
+<h3>Recommandations :</h3>
+<ul>
+  <li>
+<p>La connexion de base de données devrait être placée dans un Module, ainsi elle pourra être appelée depuis n'importe où.<br></p></li>
+  <li>
+<p>Le gestionnaire de base de données de Gambas est super!, mais si vous voulez créer une bonne base de données en MySQL vous devriez utiliser la console MySQL ou l'outil MySQL Workbench, ça aidera à éviter d'éventuels problèmes liés aux types de données.</p></li>
+  </ul>
+<h3>Les étapes :</h3>
+<p>1.Créez un nouveau Module pour votre programme. Cet exemple utilise <strong>MODMain</strong> comme nom de Module.</p>
+<p>2.Créez une nouvelle variable pour la connexion:</p>
+<div class="table"><div class="syntax">
+       <p>PUBLIC $Con AS NEW Connection</p>
+</div></div>
+<p>3.Maintenant créez une procédure pour construire la connexion:</p>
+<div class="table"><div class="syntax">
+       <p>PUBLIC PROCEDURE Connect()
+                $Con.Close()              ' Ferme la connexion
+                $Con.Type = "[..<em>../def/mysql]"       ' Type de connexion</em>
+                $Con.Host = "localhost"  ' Nom du serveur
+                $Con.Login = "root"        ' Nom d'utilisateur pour la connexion
+                $Con.Port = "3306"        ' Port à utiliser pour la connexion, habituellement 3306
+                $Con.Name = "Sophia"  ' Nom de la base de données que nous voulons utiliser
+                $Con.Password = "root123" ' Mot de passe utilisateur
+                $Con.Open()                 ' Ouvre la connexion
+       END</p>
+</div></div>
+<p>4.Maintenant créez une procédure pour démarrer le programme:</p>
+<div class="table"><div class="syntax">
+       <p>PUBLIC SUB Main()
+                Connect()	 ' lance la procédure pour se connecter
+                FRMStart.Visible = TRUE ' Le formulaire principal de votre programme
+       END</p>
+</div></div>
+<p>5.Si vous voulez exécuter une requête qui retourne tout le contenu de la base de données, il suffit d'écrire:</p>
+<div class="table"><div class="syntax">
+       <p>MODMain.$Con.Exec(“SELECT * FROM mysql.user”)</p>
+</div></div>
+<p>6.Vous pouvez créer des requêtes avec des informations fournies par l'utilisateur; faites seulement quelque chose comme ceci:</p>
+<div class="table"><div class="syntax">
+       <p>PUBLIC PROCEDURE SearchName()
+                DIM $Query AS String
+                $Query = “SELECT * FROM Amis WHERE Name = '” &amp; TBXName.Text &amp; “'”
+                MODMain.$Con.Exec($Query)
+       END</p>
+</div></div>
+<hr>
+<h2>Exemple 2. Traiter les résultats (SELECTS).</h2>
+<h3>Notes :</h3>
+<p>1.Vous devriez avoir lu les remarques et les recommandations de l'exemple 1.<br>
+2.Gambas a un type de donnée spécial pour gérer les résultats de requêtes, il est appelé <a href="http://gambaswiki.org/wiki/comp/gb.db/result?l=fr">Result</a>.</p>
+<h3>Les étapes :</h3>
+<p>1.Supposons que la <a href="http://gambaswiki.org/wiki/comp/gb.db/table?l=fr">Table</a> Amis ait les champs suivants:</p>
+<div><pre><code>       Nom
+       Prénom
+       Adresse
+       Téléphone
+</code></pre></div>
+<p>2.On stocke le résultat de la requête dans une variable:</p>
+<div class="table"><div class="syntax">
+       <p>PUBLIC PROCEDURE RechercheNom()
+                DIM $Query AS String
+                DIM $Result AS Result
+                DIM $Tel AS String</p>
+                <p>$Query = “SELECT * FROM Amis WHERE Nom = '” &amp; TBXName.Text &amp; “'”
+                $Result = MODMain.$Con.Exec($Query)
+                $Tel = $Result!Téléphone
+                Message.Info($Tel)
+       END</p>
+</div></div>
+<p>3.Si vous voulez créer un rapport imprimable, vous pouvez mettre le résultat de la requête dans un fichier (<a href="http://gambaswiki.org/wiki/comp/gb/file?l=fr">File</a>) utilisant le format <a href="http://gambaswiki.org/wiki/comp/gb.web/html?l=fr">html</a>, de manière à pouvoir l'ouvrir en utilisant un navigateur web.</p>
+<hr>
+<h2>Exemple 3. Les transactions.</h2>
+<h3>Notes :</h3>
+<p>1.Vous devriez avoir lu les notes et recommandations des exemples 1 et 2.</p>
+<h3>Les étapes:</h3>
+<p>1.Supposons que nous voulions ajouter un nouvel enregistrement dans la <a href="http://gambaswiki.org/wiki/comp/gb.db/table?l=fr">Table</a> Amis:</p>
+<div class="table"><div class="syntax">
+       <p>DIM $Result AS Result</p>
+       <p>MODMain.$Con.Begin()
+                $Result = MODMain.$Con.Create(“Amis”)
+                $Result!FirstName = TBXName.Text
+                $Result!SecondName = TBXName2.Text
+                $Result!Address = TBXAddress.Text
+                $Result!Phone = TBXPhone.Text
+                $Result.Update]()
+       MODMain.$Con.Commit()</p>
+</div></div>
+<p>2.Soyez prudent avec les types de données, bien sur, vous ne pouvez pas sauvegarder une <a href="http://gambaswiki.org/wiki/comp/gb/string?l=fr">String</a> dans un <a href="http://gambaswiki.org/wiki/lang/type/integer?l=fr">Integer</a>.</p>
+    <p></p>
+          <script type="text/javascript">
+        try { document.getElementById('login').focus(); } catch(e) {}
+      </script>
+      
+<div></div>
+
+</div>
+
+</form>
+</div>
+
+
+
+
+</body></html>

@@ -1,0 +1,154 @@
+# Gambas Form File 3.0
+
+{ Form Form
+  MoveScaled(0,0,161,119)
+  Expand = True
+  Text = ("créer une activité")
+  { MapView1 MapView
+    MoveScaled(87,28,54,40)
+  }
+  { lat Label
+    MoveScaled(129,2,7,5)
+  }
+  { lon Label
+    MoveScaled(130,10,9,11)
+  }
+  { createBtn Button
+    MoveScaled(80,105,14,5)
+    Expand = True
+    Text = ("Créer")
+  }
+  { autrerecherche Frame
+    MoveScaled(2,41,47,92)
+    Text = ("Vous recherchez") & "..."
+  }
+  { mespages Frame
+    MoveScaled(0,0,127,26)
+    Text = ("Hébergements")
+    { RadioButton2 RadioButton monmenu
+      Name = "RadioButton2"
+      MoveScaled(5,3,25,5)
+      Text = ("Hébergements")
+      Value = True
+    }
+    { RadioButton3 RadioButton monmenu
+      Name = "RadioButton3"
+      MoveScaled(33,4,29,4)
+      Text = ("Hôtels")
+    }
+    { RadioButton4 RadioButton monmenu
+      Name = "RadioButton4"
+      MoveScaled(65,4,27,4)
+      Text = ("Hébergements insolites")
+    }
+    { RadioButton5 RadioButton monmenu
+      Name = "RadioButton5"
+      MoveScaled(94,4,28,6)
+      Text = ("Hébergements collectifs")
+    }
+    { RadioButton6 RadioButton monmenu
+      Name = "RadioButton6"
+      MoveScaled(5,9,27,5)
+      Text = ("Meublés et chambres d'hôte")
+    }
+    { RadioButton7 RadioButton monmenu
+      Name = "RadioButton7"
+      MoveScaled(33,9,29,4)
+      Text = ("Activité")
+    }
+    { RadioButton8 RadioButton
+      MoveScaled(57,17,1,1)
+    }
+    { RadioButton9 RadioButton monmenu
+      Name = "RadioButton9"
+      MoveScaled(65,9,26,4)
+      Text = ("Patrimoine culturel")
+    }
+    { RadioButton10 RadioButton monmenu
+      Name = "RadioButton10"
+      MoveScaled(94,10,31,3)
+      Text = ("Patrimoine historique")
+    }
+    { RadioButton11 RadioButton monmenu
+      Name = "RadioButton11"
+      MoveScaled(6,15,25,5)
+      Text = ("Sites naturels")
+    }
+    { RadioButton12 RadioButton monmenu
+      Name = "RadioButton12"
+      MoveScaled(33,16,29,3)
+      Text = ("Transports")
+    }
+    { RadioButton13 RadioButton monmenu
+      Name = "RadioButton13"
+      MoveScaled(65,15,27,4)
+      Text = ("Office de tourisme")
+    }
+    { RadioButton14 RadioButton monmenu
+      Name = "RadioButton14"
+      MoveScaled(94,15,29,4)
+      Text = ("Randonnées")
+    }
+    { RadioButton15 RadioButton monmenu
+      Name = "RadioButton15"
+      MoveScaled(5,22,24,2)
+      Text = ("Nature")
+    }
+    { RadioButton16 RadioButton monmenu
+      Name = "RadioButton16"
+      MoveScaled(34,21,26,3)
+      Text = ("Agenda")
+    }
+    { RadioButton17 RadioButton monmenu
+      Name = "RadioButton17"
+      MoveScaled(65,21,24,3)
+      Text = ("Boutiques de souvenirs")
+    }
+  }
+  { communeChamp TextBox
+    MoveScaled(22,35,22,4)
+  }
+  { nomChamp TextBox
+    MoveScaled(22,30,22,3)
+  }
+  { nomLabel2 Label
+    MoveScaled(4,29,16,4)
+    Text = ("Nom")
+  }
+  { communeLabel2 Label
+    MoveScaled(4,35,17,3)
+    Text = ("Commune")
+  }
+  { infosLabel Label
+    MoveScaled(53,31,8,3)
+    Text = ("Infos")
+  }
+  { infosChamp TextArea
+    MoveScaled(52,36,16,16)
+  }
+  { cpLabel Label
+    MoveScaled(54,58,27,3)
+    Text = ("Code postal")
+  }
+  { cpChamp TextBox
+    MoveScaled(52,65,24,4)
+  }
+  { tarifsLabel Label
+    MoveScaled(54,75,8,3)
+    Text = ("Tarifs")
+  }
+  { tarifsChamp TextBox
+    MoveScaled(52,80,24,4)
+  }
+  { PictureBox1 PictureBox
+    MoveScaled(109,72,42,36)
+  }
+  { FileBox1 Button
+    MoveScaled(82,71,25,8)
+    Text = ("Ajouter une image")
+  }
+  { imageAjoutee Label
+    MoveScaled(79,94,20,4)
+    Visible = False
+  }
+}

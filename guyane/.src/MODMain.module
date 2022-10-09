@@ -1,0 +1,24 @@
+' Gambas module file
+
+Public $Con As New Connection
+
+       
+Public Procedure Connect()
+                $Con.Close()              ' Ferme la connexion
+                $Con.Type = "mysql"       ' Type de connexion
+                $Con.Host = "localhost"  ' Nom du serveur
+                $Con.Login = "Sophia"        ' Nom d'utilisateur pour la connexion
+                $Con.Port = "3306"        ' Port à utiliser pour la connexion, habituellement 3306
+                $Con.Name = "guyane_amazonie"  ' Nom de la base de données que nous voulons utiliser
+                $Con.Password = "Root123!" ' Mot de passe utilisateur
+                $Con.Open()                 ' Ouvre la connexion
+       End
+
+
+Public Sub Main()
+   Connect()  ' lance la procédure pour se connecter
+                Form.Visible = True ' Le formulaire principal de votre programme
+                
+                
+                
+End

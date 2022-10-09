@@ -1,0 +1,104 @@
+' Gambas class file
+
+ 
+
+
+Public Sub ok_Click()
+
+  Dim $Result As Result
+
+
+  MODMain.$Con.Begin()
+  $Result = MODMain.$Con.Create("Users")
+
+  $Result!nom = nomChamp.Text
+  $Result!prenom = prenomChamp.Text
+    $Result!email = emailChamp.Text
+  $Result.Update()
+  MODMain.$Con.Commit()
+End
+
+
+Public Sub Form_Open()
+
+  MODMain.Main()
+Dim myargs As Collection
+
+
+  Dim mp As New MapPoint(3.785, -52.861)   ' Punto 2)
+ ' oppure: mp.Lat = 41.89018
+ '         mp.Lon = 12.49230
+
+
+
+  MapView1.Map.DefaultCache = "/home/mary/gambas"
+  MapView1.Map.AddTile("openstreet", "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", Null, "cartes")  ' Punti 4) e 5)
+  MapView1.Map.Zoom = 7          ' Punto 6)
+  MapView1.Map.Center = mp        ' Punto 7)
+    
+  
+  ''MapView1.Map.DefaultCache = "/percorso/non/temporaneo/della/cartella/delle/tessere"
+
+''MapView1.Map.AddTile("Esempio", Null, Null, "nome_cartella")
+
+Message.Info("La Map est dessinée")
+End
+
+Public Sub nomChamp_KeyPress()
+
+
+End
+
+Public Sub nomLabel2_MouseDown()
+
+  
+
+End
+
+Public Sub Frame1_MouseDown()
+
+  
+
+End
+
+Public Sub chercherBtn_Click()
+ Dim $Query As String
+   Dim $Result As Result
+   Dim $nom As String
+   Dim $prenom As String
+   
+  $Query = "SELECT * FROM Users WHERE lower(nom) like lower('%" & cherchernomChamp.Text & "%')"
+                $Result = MODMain.$Con.Exec($Query)
+                If $Result And $Result.Available Then
+                $nom = $Result!nom
+                $prenom = $Result!prenom
+                Message.Info($nom & " " & $prenom)
+                Else 
+                  Message.Info("Aucun résultat ne correspond à votre recherche")
+                End If
+                
+
+
+End
+
+Public Sub PictureBox1_MouseDown()
+
+
+
+End
+
+Public Sub Timer1_Timer()
+
+  
+
+End
+
+Public Sub MapView1_MouseDown()
+
+lat.text = MapView1.X
+lon.text = MapView1.Y
+End
+
+Public Sub MapView1_Draw()
+  MAPMain.initmap()
+End

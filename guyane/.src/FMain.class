@@ -1,0 +1,493 @@
+' Gambas class file
+
+ 
+
+
+Public Sub ok_Click()
+
+End 
+
+
+
+Public Sub MyButton() 
+  
+  '''Message.info("hi!!!")
+  
+End
+
+
+Public Sub Form_Open()
+
+  MODMain.Main()
+  Dim test As CheckBox
+Dim tmp As String
+
+
+  
+Dim myargs As Collection
+
+Dim $incr As Integer
+
+
+  Dim mp As New MapPoint(3.785, -52.861)   ' Punto 2)
+ ' oppure: mp.Lat = 41.89018
+ '         mp.Lon = 12.49230
+
+
+
+  MapView1.Map.DefaultCache = "/home/mary/gambas"
+  MapView1.Map.AddTile("openstreet", "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", Null, "cartes")  ' Punti 4) e 5)
+  MapView1.Map.Zoom = 7          ' Punto 6)
+  MapView1.Map.Center = mp        ' Punto 7)
+  
+  
+  Dim $table1 As String, $table2 As String, $query22 As String, $query2 As String, $Result2 As Result, $Results2 As Result, $incr6 As Integer
+  Dim $myparent As Integer
+  Dim $check As RadioButton, $var As String
+  Dim $yradiobtn As Integer
+ $Query22 = "select * from mypages"
+  $table2 = "mypages"
+  ''
+  $query2 = "" 
+ $Result2 = MODMain.$Con.Exec($Query22)
+                $Results2 = MODMain.$Con.Find($table2, $query2)
+                $incr = 0
+                $myparent = 100
+                $yradiobtn = 20
+                $incr = 0
+                ' For Each $var In $Results2.All("title")
+                '   TextArea1.text = TextArea1.text & " - " & $var & " - " & $Results2.All("id")[$incr]
+                '   $incr = $incr + 1
+                ' Next
+             ' For Each $var In $Results2.All("title")
+             '   
+             '   $check = New Radiobutton(mespages)
+             '   $check.name = "monmenu" & $incr
+             ' 
+             '   $check.Text = $var
+             '   TextArea1.text = TextArea1.text & " - " & $var
+             '   $check.Value = $results2.All("id")[$incr]
+             '   $check.Reparent(mespages)
+             '   $check.X = $myparent
+             '   $check.width = 230
+             '   
+             '   $check.Y = $yradiobtn
+             '   $myparent = $myparent + 240
+             '   $incr = $incr + 1
+             '   If $myparent > (mespages.width - 250) Then
+             '     $myparent = 100
+             '     $yradiobtn = $yradiobtn + 30
+             '     mespages.height = mespages.height + 30
+             '   Endif
+             '   ''ajouter evenement
+             '   tmp = "MyButton"
+             '   Object.Attach($check, mespages, tmp)
+             ' Next
+             ' 
+Dim m As RadioButton
+m = mespages.Children[0]
+If m Then
+  
+
+m.Value = True  ' RadioButton2 is selected
+m.SetFocus
+Endif
+
+  ''MapView1.Map.DefaultCache = "/percorso/non/temporaneo/della/cartella/delle/tessere"
+
+''MapView1.Map.AddTile("Esempio", Null, Null, "nome_cartella")
+
+
+End
+
+Public Sub nomChamp_KeyPress()
+
+Print Key.code 
+
+End
+
+Public Sub communeChamp_MouseDown()
+
+  
+
+End
+
+Public Sub autrerecherche_MouseDown()
+
+  ' '''Message.info("test")
+
+End
+
+Public Sub chercherBtn_Click()
+
+
+End
+
+Public Sub PictureBox1_MouseDown()
+
+
+
+End
+
+Public Sub Timer1_Timer()
+
+  
+
+End
+
+Public Sub MapView1_MouseDown()
+
+lat.text = MapView1.Map.Center.Lat
+lon.text = MapView1.Map.Center.Lon
+
+End
+
+Public Sub MapView1_Draw()
+  MAPMain.initmap()
+End
+
+Public Sub FileProperties1_MouseDown()
+
+  
+
+End
+
+Public Sub TabStrip1_Click()
+
+  
+
+End
+
+Public Sub TabStrip2_Click()
+
+
+
+End
+
+Public Sub monmenu_Click()
+Dim $table As String
+Dim $query As String
+Dim $Query1 As String
+Dim $Result As Result
+Dim $Results As ContainerChildren
+Dim $Results1 As Result
+Dim $Results2 As Result
+Dim $Results3 As Result
+Dim $Results4 As Result
+Dim $Results5 As Result
+Dim $msg As String
+Dim $type As String
+Dim $table2 As String
+Dim $query2 As String
+Dim $query22 As String
+Dim $Result2 As Result
+Dim $msg2 As String
+Dim $type2 As String
+
+Dim $var As String
+Dim $check As CheckBox
+Dim $value As String
+Dim $incr As Integer
+Dim $incr2 As Integer
+Dim $myparent As Integer
+Dim $res As String
+Dim $res2 As String
+Dim $mytext As Label
+Dim $res3 As String
+Dim $res4 As String
+Dim $res5 As Integer
+Dim $incr1 As Integer
+Dim $resultsqls As Result
+Dim $myincr As Integer
+
+Dim $myradiobtn As RadioButton
+
+autrerecherche.Children.clear
+autrerecherche.Children.Clear
+
+
+
+                $Results = mespages.Children
+                $myincr = 1
+                For Each $myradiobtn In $Results
+                  
+                    
+                      If $myradiobtn.Value == True And $myradiobtn.HasFocus Then
+                         $incr = 0
+                          $myparent = 40
+                          $res = $myincr
+                        $Results5 = MODMain.$Con.Find("optiontypes", "where mypage_id = '" & $res & "'") 
+                        For Each $res3 In $Results5.All("id")
+                            $mytext = New Label(autrerecherche)
+               $mytext.Text = $Results5.All("title")[$incr]
+
+               $mytext.Reparent(autrerecherche)
+               
+               $mytext.Y = $myparent
+               $mytext.width = 250
+               $mytext.height = 50
+               $mytext.X = 20
+               $myparent = $myparent + 40
+               autrerecherche.height = autrerecherche.height + 40
+                          $Results4 = MODMain.$Con.Find("options", "where optiontype_id = '" & $res3 & "'") 
+                          
+                          $incr2 = 0
+                          For Each $res5 In $Results4.All("id")
+   $check = New CheckBox(autrerecherche)
+               $check.Text = $Results4.All("title")[$incr2]
+               $check.Value = 0
+               $check.tag = $res5
+               
+               $check.Reparent(autrerecherche)
+               
+               $check.Y = $myparent
+               $check.width = 250
+               
+               $check.X = 20
+               $myparent = $myparent + 20
+               
+               $incr2 = $incr2 + 1
+                          
+                        Next
+                        $incr = $incr + 1
+                        Next
+                        Continue
+                      Endif
+                    
+                  $myincr = $myincr + 1
+                  
+                Next
+' $Query1 = "select * from activites"
+'   $table = "activites"
+'   $query = "where type = '" & $type & "'"
+'                 $Result = MODMain.$Con.Exec($Query1)
+'                 $Resultsqls = MODMain.$Con.Find($table, $query)
+'                 If $Result And $Result.Available Then
+'               $Query22 = "select * from options"
+'   $table2 = "options"
+'   ''
+'   $query2 = "" '' "where ac.type = '" & $type & "'" '' left join type_" & $type & "s a on a.option_id = options.id left join activites ac on ac.id = a.activite_id"
+'                 $Result2 = MODMain.$Con.Exec($Query22)
+'                 $Results2 = MODMain.$Con.Find($table2, $query2)
+'                 $incr = 0
+'                 $myparent = 40
+'              For Each $var In $Results2.All("title")
+'                
+'                $check = New CheckBox(autrerecherche)
+'                $check.Text = $var
+'                $check.Value = $results2.All("id")[$incr]
+'                $check.Reparent(autrerecherche)
+'                $check.Y = $myparent
+'                $check.width = 100
+'                
+'                $check.X = 20
+'                $myparent = $myparent + 40
+'                $incr = $incr + 1
+'                
+'              Next
+             
+                ' Else 
+                '   '''Message.info("Aucun résultat ne correspond à votre recherche")
+                ' End If
+
+End
+
+
+
+Public Sub rechercherBtn_Click()
+Dim $table As String
+Dim $query As String
+Dim $Query1 As String
+Dim $Result As Result
+Dim $Results As ContainerChildren
+Dim $Results1 As Result
+Dim $Results2 As Result
+Dim $Results3 As Result
+Dim $Results4 As Result
+Dim $Results5 As Result
+Dim $msg As String
+Dim $type As String
+Dim $table2 As String
+Dim $query2 As String
+Dim $query22 As String
+Dim $Result2 As Result
+Dim $msg2 As String
+Dim $type2 As String
+
+Dim $var As String
+Dim $check As CheckBox
+Dim $value As String
+Dim $incr As Integer
+Dim $incr2 As Integer
+Dim $myparent As Integer
+Dim $res As String
+Dim $res2 As String
+Dim $mytext As Label
+Dim $res3 As String
+Dim $res4 As String
+Dim $res5 As Integer
+Dim $incr1 As Integer
+Dim $resultsqls As Result
+Dim $myincr As Integer
+Dim $myincre As Integer
+Dim $myradiobtn As RadioButton
+Dim $currentcb As Checkbox
+Dim $mesresultats As Result
+Dim $mesresultatssql As String
+Dim $mesactivites As Result
+Dim $mesactivitessql As String
+Dim $nbcb As Integer
+$nbcb = 0
+ Dim firstone As Boolean
+                          firstone = False
+$mesresultatssql = "where option_id in ("
+
+                $Results = mespages.Children
+                If autrerecherche.Children.count > 0
+                $myincr = 1
+                $myincre = 0
+                  '''Message.info($Results.Count & "boutons de radio")
+                For Each $myradiobtn In $Results
+                    Dim $k As String
+                    If $myradiobtn.HasFocus 
+                    $k = "true" 
+                    Else
+                    $k = "False"
+                    End If
+                      '''Message.info($k, "ok pour " & $myradiobtn.name)
+                      
+                      If $myradiobtn.value = True Then
+                         $incr = 0
+                          $myparent = 40
+                          $res = $myincr
+                        $Results5 = MODMain.$Con.Find("optiontypes", "where mypage_id = '" & $res & "'") 
+                        
+                        '''Message.info($Results5.count & " types d'option")
+                        For Each $res3 In $Results5.All("id")
+                            
+                          $Results4 = MODMain.$Con.Find("options", "where optiontype_id = '" & $res3 & "'") 
+                          
+                          $myincre = $myincre + 1
+                          '''Message.info($Results4.Length & " resultats")
+                         
+                          For Each $res5 In $Results4.All("id")
+                                  
+                                  
+                                  $currentcb = autrerecherche.Children[$myincre]
+                                  '''Message.info($currentcb.name)
+                                  Dim myint As Integer
+                                  
+                                 
+                                  If $currentcb.value = True Then
+                                    If firstone Then
+                                      $mesresultatssql = $mesresultatssql & ","
+                                  Else 
+                                    firstone = True
+                                    Endif
+                                    $mesresultatssql = $mesresultatssql & $res5 
+                                    $nbcb = $nbcb + 1
+                                  Endif
+                                    $myincre = $myincre + 1
+                          
+                          Next
+                        $incr = $incr + 1
+                        Next
+                        Continue
+                      Endif
+                    
+                  $myincr = $myincr + 1
+                  
+                Next
+  
+$mesresultatssql = $mesresultatssql & ")"
+'''Message.info($mesresultatssql)
+'''seulement si plus d'une ceck box est selectionnee
+If $nbcb > 0
+$mesresultats = MODMain.$Con.Find("mytypes", $mesresultatssql)
+' rajouter et que les activites dont les titres ou les communes ressemblent à la requete de l'user
+'''
+'''Message.Info(communeChamp.text[0, communeChamp.Text.len])
+Dim $macommune As String
+Dim $monnom As String
+Dim $nomstr As String
+Dim $comstr As String
+$macommune = communeChamp.Text
+$monnom = nomChamp.text
+If $macommune.len > 0 Or $monnom.len > 0
+$mesactivitessql = "where"
+If $macommune And $macommune.len > 0
+$comstr = " commune like '%" & $macommune & "%'"
+$mesactivitessql = $mesactivitessql + $comstr
+Endif 
+If $monnom And $monnom.len > 0 Then
+  If $comstr Then
+    $mesactivitessql = $mesactivitessql + " and"
+  Endif
+  $mesactivitessql = $mesactivitessql + " nom Like '%" & $monnom & "%'"
+Endif 
+ Else 
+    $mesactivitessql = ""
+Endif
+If $mesresultats.count > 0
+$mesactivitessql = $mesactivitessql + " and where id in ("
+Dim first As Boolean
+first = True
+For Each $res5 In $mesresultats.All("activite_id")
+  If firstone Then
+    
+     
+      $mesactivitessql = $mesactivitessql & ","
+      Else 
+        firstone = True
+  Endif  
+  $mesactivitessql = $mesactivitessql & $res5 
+
+Next
+$mesactivitessql = $mesactivitessql & ")"
+'''Message.info($mesactivitessql)
+
+End If
+ $mesactivites = MODMain.$Con.Find("activites", $mesactivitessql)
+ If $mesactivites.count > 0 Then
+   Else 
+     Message.Info("Aucune activité ne correspond à votre recherche")
+ Endif
+  
+Else 
+  Message.Info("sélectionnez une(des) catégorie(s) d'activité")
+  Endif 
+  Else 
+  Message.info("sélectionnez une catégorie d'activité")
+End If
+
+
+''enregistrer des resultats du site
+
+'marquer les resultats sur la carte
+'''
+End
+
+Public Sub CheckBox1_Click()
+
+  
+
+End
+
+
+Public Sub monmenu_GotFocus()
+
+  
+
+End
+
+Public Sub communeChamp_KeyPress()
+
+  
+
+End
+
+Public Sub createBtn_Click()
+
+  FCreate.Show
+
+End

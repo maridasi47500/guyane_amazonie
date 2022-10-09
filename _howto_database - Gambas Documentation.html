@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!-- saved from url=(0042)https://gambaswiki.org/wiki/howto/database -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <link rel="stylesheet" href="./_howto_database - Gambas Documentation_files/style.css">
+      <link rel="icon" href="https://gambaswiki.org/wiki/logo.png" type="image/png">
+  <title>/howto/database - Gambas Documentation</title>
+  <script type="text/javascript" src="./_howto_database - Gambas Documentation_files/playground.js"></script>
+  </head>
+
+<body>
+
+
+<div id="page-frame">
+<form name="form" method="post" enctype="multipart/form-data">
+
+
+
+<div class="header">
+
+  <div class="header-inside">
+  
+    <div class="header-bar">
+      <div class="up">
+                  <a href="https://gambaswiki.org/wiki"><img src="./_howto_database - Gambas Documentation_files/up.png"></a>
+              </div>
+            <div class="title">
+        <a href="https://gambaswiki.org/wiki/howto">howto</a>&nbsp;•&nbsp;<a href="https://gambaswiki.org/wiki/howto/database">database</a>      </div>
+                  <div style="float:right;">
+              <div class="command"><input type="submit" name="ident" value="Login"></div>
+            <select id="lang" name="lang" onchange="document.form.submit();">
+<option value="ar">ar</option>
+<option value="ca">ca</option>
+<option value="cs">cs</option>
+<option value="de">de</option>
+<option value="en" selected="">en</option>
+<option value="eo">eo</option>
+<option value="es">es</option>
+<option value="fa">fa</option>
+<option value="fr">fr</option>
+<option value="hu">hu</option>
+<option value="id">id</option>
+<option value="it">it</option>
+<option value="ja">ja</option>
+<option value="ko">ko</option>
+<option value="mk">mk</option>
+<option value="nl">nl</option>
+<option value="pl">pl</option>
+<option value="pt">pt</option>
+<option value="pt_BR">pt_BR</option>
+<option value="ru">ru</option>
+<option value="sq">sq</option>
+<option value="tr">tr</option>
+<option value="vi">vi</option>
+<option value="zh">zh</option>
+<option value="zh_TW">zh_TW</option>
+</select>
+      </div>
+    </div>
+  </div>
+
+  
+</div>
+
+
+
+<div id="page" class="page">
+
+
+
+      <h1>How To Open a MySQL connection and use it</h1>
+<h2>Example 1. Create a new MySQL connection</h2>
+<h3>Notes</h3>
+<ol>
+  <li>
+<p>You should have already installed the <a href="https://gambaswiki.org/wiki/comp/gb.mysql">gb.mysql</a> and all MySQL related packages.<br></p></li>
+  <li>
+<p>This is not an example about SQL (MySQL or otherwise) statements.<br></p></li>
+  <li>
+<p>The privileges to a database are granted by the MySQL administrator to the MySQL user and are not controlled by Gambas.<br></p></li>
+  <li>
+<p>The <a href="https://gambaswiki.org/wiki/comp/gb.db">gb.db</a> component has to be selected for use in your project before your program can access the DataBase Engine.<br></p></li>
+  </ol>
+<h3>Recommendations</h3>
+<ol>
+  <li>
+<p>The database connection of your program should be placed in a Module, so it can be called from anywhere.<br></p></li>
+  <li>
+<p>The gambas-database-manager is great, However if you want to create a good database in MySQL you should use the MySQL console or MySQL Workbench, these will help prevent potential problems dealing with Data Types.</p></li>
+  </ol>
+<h3>Steps</h3>
+<p>1.Create a new Module for you program, this example uses <strong>MODMain</strong> as the Module name.</p>
+<p>2.Create a new variable for the connection:</p>
+<div class="table"><div class="syntax">
+       <p>PUBLIC $Con AS NEW Connection</p>
+</div></div>
+<p>3.Now create a Procedure to make the connection:</p>
+<div class="table"><div class="syntax">
+       <p>PUBLIC PROCEDURE Connect()
+                $Con.Close()              ' Close the connection
+                $Con.Type = "[..<em>../def/mysql]"       ' Type of connection</em>
+                $Con.Host = "localhost"   ' Name of the server
+                $Con.Login = "root"       ' User's name for the connection
+                $Con.Port = "3306"        ' Port to use in the connection, usually 3306
+                $Con.Name = "Sophia"      ' Name of the database we want to use
+                $Con.Password = "root123" ' User's password
+                $Con.Open()               ' Open the connection
+       END<br></p>
+</div></div>
+<p>4.Now create a Procedure to start the program:</p>
+<div class="table"><div class="syntax">
+       <p>PUBLIC SUB Main()
+                Connect() ' Run the Procedure to connect
+                FRMStart.Visible = TRUE ' The main form of your program
+       END<br></p>
+</div></div>
+<p>5.If you want to execute a query to return everything database only write:</p>
+<div class="table"><div class="syntax">
+       <p>MODMain.$Con.Exec(“SELECT * FROM mysql.user”)</p>
+</div></div>
+<p>6.You can create queries with information supplied by the user, just do something like this:</p>
+<div class="table"><div class="syntax">
+       <p>PUBLIC PROCEDURE SearchName()
+                DIM $Query AS String
+                $Query = “SELECT * FROM Friends WHERE Name = '” &amp; TBXName.Text &amp; “'”
+                MODMain.$Con.Exec($Query)
+       END<br></p>
+</div></div>
+<hr>
+<h2>Example 2. Dealing with results (SELECTS).</h2>
+<h3>Notes:</h3>
+<p>1.You should have read the Notes and Recommendations from Example 1.<br>
+2.Gambas has a special Data Type to deal with query's results, it is called <a href="https://gambaswiki.org/wiki/comp/gb.db/result">Result</a>.<br></p>
+<h3>Steps:</h3>
+<p>1.Let's suppose the <a href="https://gambaswiki.org/wiki/comp/gb.db/table">Table</a> Friends has the following fields:</p>
+<div><pre><code>       FirstName
+       SecondName
+       Address
+       Phone
+</code></pre></div>
+<p>2.Store the query's result into a variable:</p>
+<div class="table"><div class="syntax">
+       <p>PUBLIC PROCEDURE SearchName()
+                DIM $Query AS String
+                DIM $Result AS Result
+                DIM $Phone AS String</p>
+                <p>$Query = “SELECT * FROM Friends WHERE Name = '” &amp; TBXName.Text &amp; “'”
+                $Result = MODMain.$Con.Exec($Query)
+                $Phone = $Result!Phone
+                Message.Info($Phone)
+       END<br></p>
+</div></div>
+<p>3.If you want to create a printable report, you can put the query's result into a <a href="https://gambaswiki.org/wiki/comp/gb/file">File</a> using the <a href="https://gambaswiki.org/wiki/comp/gb.web/html">html</a> format, so you can open it using a Web Browser.</p>
+<hr>
+<h2>Example 3. Transactions.</h2>
+<h3>Notes:</h3>
+<p>1.You should have read the Notes and Recommendations from Examples 1 and 2.</p>
+<h3>Steps:</h3>
+<p>1.Let's suppose we want to add a new record into the <a href="https://gambaswiki.org/wiki/comp/gb.db/table">Table</a> Friends:</p>
+<div class="table"><div class="syntax">
+       <p>DIM $Result AS Result</p>
+       <p>MODMain.$Con.Begin()
+                $Result = MODMain.$Con.Create(“Friends”)
+                $Result!FirstName = TBXName.Text
+                $Result!SecondName = TBXName2.Text
+                $Result!Address = TBXAddress.Text
+                $Result!Phone = TBXPhone.Text
+                $Result.Update]()
+       MODMain.$Con.Commit()</p>
+</div></div>
+<p>2.You should be careful with the Data Types, of course you can't save a <a href="https://gambaswiki.org/wiki/comp/gb/string">String</a> into a <a href="https://gambaswiki.org/wiki/lang/type/integer">Integer</a>.<br></p>
+    <p></p>
+          <script type="text/javascript">
+        try { document.getElementById('login').focus(); } catch(e) {}
+      </script>
+      
+<div></div>
+
+</div>
+
+</form>
+</div>
+
+
+
+
+</body></html>

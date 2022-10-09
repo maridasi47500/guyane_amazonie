@@ -1,0 +1,57 @@
+# Gambas Form File 3.0
+
+{ Form Form
+  MoveScaled(0,0,126,82)
+  Text = ("Guyane amazone")
+  Maximized = True
+  Sticky = True
+  { nomLabel TextLabel
+    MoveScaled(34,39,16,3)
+    Text = ("Nom")
+  }
+  { ok Button
+    MoveScaled(59,70,18,9)
+    Text = ("ok")
+  }
+  { nomLabel2 TextLabel
+    MoveScaled(35,24,16,3)
+    Text = ("Prenom")
+  }
+  { Frame1 Frame
+    MoveScaled(5,21,62,46)
+    Text = ("Mes infos")
+    { emailLabel Label
+      MoveScaled(7,31,13,4)
+      Text = ("Email")
+    }
+    { emailChamp TextBox
+      MoveScaled(5,38,19,5)
+    }
+    { prenomChamp TextArea
+      MoveScaled(12,8,33,7)
+    }
+  }
+  { Frame2 Frame
+    MoveScaled(72,2,51,25)
+    Text = ("rechercher")
+    { cherchernomChamp TextBox
+      MoveScaled(13,10,25,7)
+    }
+    { chercherBtn Button
+      MoveScaled(20,19,15,4)
+      Text = ("chercher")
+    }
+  }
+  { nomChamp TextBox
+    MoveScaled(11,44,25,6)
+  }
+  { MapView1 MapView
+    MoveScaled(71,29,54,40)
+  }
+  { lat Label
+    MoveScaled(24,6,9,6)
+  }
+  { lon Label
+    MoveScaled(44,6,9,6)
+  }
+}
