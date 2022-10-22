@@ -123,7 +123,7 @@ Public Sub chercherBtn_Click()
 
 End
 
-Public Sub PictureBox1_MouseDown()
+Public Sub imageresult_MouseDown()
 
 
 
@@ -337,13 +337,15 @@ Dim $mesresultatssql As String
 Dim $mesactivites As Result
 Dim $mesactivitessql As String
 Dim $nbcb As Integer
+ Dim $img As Image
+ Dim $nameimg As String
 $nbcb = 0
  Dim firstone As Boolean
                           firstone = False
 $mesresultatssql = "where option_id in ("
 
                 $Results = mespages.Children
-                If autrerecherche.Children.count > 0
+                '''If autrerecherche.Children.count > 0
                 $myincr = 1
                 $myincre = 0
                   '''Message.info($Results.Count & "boutons de radio")
@@ -369,7 +371,7 @@ $mesresultatssql = "where option_id in ("
                           
                           $myincre = $myincre + 1
                           '''Message.info($Results4.Length & " resultats")
-                         
+                         If autrerecherche.Children.count > 0
                           For Each $res5 In $Results4.All("id")
                                   
                                   
@@ -390,6 +392,7 @@ $mesresultatssql = "where option_id in ("
                                     $myincre = $myincre + 1
                           
                           Next
+                          Endif
                         $incr = $incr + 1
                         Next
                         Continue
@@ -400,10 +403,8 @@ $mesresultatssql = "where option_id in ("
                 Next
   
 $mesresultatssql = $mesresultatssql & ")"
-'''Message.info($mesresultatssql)
-'''seulement si plus d'une ceck box est selectionnee
-If $nbcb > 0
-$mesresultats = MODMain.$Con.Find("mytypes", $mesresultatssql)
+
+
 ' rajouter et que les activites dont les titres ou les communes ressemblent à la requete de l'user
 '''
 '''Message.Info(communeChamp.text[0, communeChamp.Text.len])
@@ -411,60 +412,321 @@ Dim $macommune As String
 Dim $monnom As String
 Dim $nomstr As String
 Dim $comstr As String
+Dim $usetxt As Boolean
+Dim $usetxtstr As String
+Dim $tablejointure As String
+Dim $resultatdemesactivites As Result
+Dim $resultatdemesactivitessql As String
 $macommune = communeChamp.Text
 $monnom = nomChamp.text
+Print "mon nom", $monnom
+Print "ma commune", $macommune
 If $macommune.len > 0 Or $monnom.len > 0
 $mesactivitessql = "where"
+$usetxtstr = "and"
 If $macommune And $macommune.len > 0
 $comstr = " commune like '%" & $macommune & "%'"
-$mesactivitessql = $mesactivitessql + $comstr
+$mesactivitessql = $mesactivitessql & $comstr
+$usetxtstr = $usetxtstr & $comstr
 Endif 
 If $monnom And $monnom.len > 0 Then
   If $comstr Then
-    $mesactivitessql = $mesactivitessql + " and"
+    $mesactivitessql = $mesactivitessql & " and"
+    $usetxtstr = $usetxtstr & " and"
   Endif
-  $mesactivitessql = $mesactivitessql + " nom Like '%" & $monnom & "%'"
+  $mesactivitessql = $mesactivitessql & " nom Like '%" & $monnom & "%'"
+  $usetxtstr = $usetxtstr & " nom Like '%" & $monnom & "%'"
 Endif 
+$usetxt = True
+
  Else 
     $mesactivitessql = ""
+    Print "l'utilisateur n'a employé aucun champ"
+    $usetxt = False
 Endif
-If $mesresultats.count > 0
-$mesactivitessql = $mesactivitessql + " and where id in ("
-Dim first As Boolean
-first = True
-For Each $res5 In $mesresultats.All("activite_id")
-  If firstone Then
-    
-     
-      $mesactivitessql = $mesactivitessql & ","
+Print "sql"
+Print $mesactivitessql
+'''Message.info($mesresultatssql)
+'''seulement si plus d'une ceck box est selectionnee
+Dim $myvar As Integer
+$myvar = 0
+Print "nbcb"
+Print $nbcb
+
+If $nbcb And CInt($nbcb) > 0 Then
+  $myvar = 1
+
+$mesresultats = MODMain.$Con.Find("mytypes", $mesresultatssql)
+$resultatdemesactivites = MODMain.$Con.Find("mytypes", $mesresultatssql)
+$resultatdemesactivitessql = $mesresultatssql
+'' la chine contient toutes les activites des types selection
+Endif
+
+
+ '''$mesactivites = MODMain.$Con.Find("activites", $mesactivitessql)
+ If $mesactivitessql = "" Then
+    $mesactivites = $mesactivites
+ Else
+ $mesactivites = MODMain.$Con.Exec("select * from activites " & $mesactivitessql)
+ Endif
+ ''''''''''''''''''''''''''''''la variable activites contient uniquement celle cherchees avec nom et commune ou toutes les activites
+ ''''''''''''''''''
+ Print "(table 'mytypes') résultats cherchés dans les colonnes : option_id (cases à cocher)"
+Print CStr($mesresultatssql)
+Print "Nombre de résultats : " 
+If $mesresultats Then
+Print CStr($mesresultats.count)
+Else 
+Print "0"
+Endif 
+ Print "(table 'activites') résultats cherchés dans les colonnes : nom et commune (champ de texte)"
+Print CStr($mesactivitessql)
+Print "Nombre de résultats : "
+If $mesactivites Then
+Print CStr($mesactivites.count)
+Else 
+Print "0"
+Endif 
+
+
+
+'''comment rechercher mes activites dans la table jointure
+
+If IsNull($mesactivites) Then
+  
+ Print "aucun résultat trouvé avec les champs (champs vides)"
+  Else 
+  
+
+If $mesactivites.count > 0 Then
+  Print "il y a plus d'une d'activités"
+  firstone = False
+  Print "comment il faudra rechercher mes activites dans la table jointure ?"
+  $tablejointure = "activite_id in("
+  For Each $res5 In $mesactivites.All("id")
+    If firstone Then
+
+      $tablejointure = $tablejointure & ","
       Else 
         firstone = True
   Endif  
-  $mesactivitessql = $mesactivitessql & $res5 
+  $tablejointure = $tablejointure & $res5 
+
+  Next
+  $tablejointure = $tablejointure & ")"
+  Print $tablejointure
+  Else 
+    Print "0 activités trouvées"
+    $tablejointure = ""
+    Endif
+   
+
+
+Endif
+
+  
+
+
+''' ecrire la suite de la chaine  select * from mytypes (option_id et activite_id)
+'chercher aussi dans la colonne option_id de mytypes
+Print "comment rechercher les options dans la table jointure"
+Dim $othersql As String
+Dim $jointothersql As String
+
+$jointothersql = ""
+$jointothersql = $resultatdemesactivitessql
+'If Not IsNull($resultatdemesactivites) Then
+'If $resultatdemesactivites.count > 0 Then
+'  Print "l'utilisateur a cherche plus d'un type d'activite"
+
+
+
+
+'$jointothersql = $jointothersql & "activite_id in ("
+'firstone = False
+'For Each $res5 In $resultatdemesactivites.All("id")
+ '   If firstone Then
+
+ '     $jointothersql = $jointothersql & ","
+
+ '     Else 
+'        firstone = True
+'  Endif  
+ 
+'  $jointothersql = $jointothersql & $res5
+
+'Next
+
+'$jointothersql = $jointothersql & ")"
+'Endif
+'''''''''''''''''''''''''''''''''''''''''''''''''''
+If $jointothersql = "" Then
+  Print "l'utilisateuru a sélectionné 0 options"
+Endif
+
+
+''resultat de la jointure
+
+Dim $monresultatjointure As Result
+Dim $marequete As String
+
+$marequete = "select * from mytypes "
+If Not $tablejointure = "" Then
+  $marequete = $marequete & " where " & $tablejointure
+Endif
+If Not $jointothersql = "" Then 
+  If $tablejointure = "" Then 
+    $marequete = $marequete & " where "
+   Else 
+     $marequete = $marequete & " and  "
+  Endif
+  $marequete = $marequete & $jointothersql[6, ($jointothersql.len - 1)]
+Endif
+
+
+Print $marequete
+If Not $jointothersql = "" Or Not $tablejointure = ""
+$monresultatjointure = MODMain.$Con.Exec($marequete)
+End If
+''''''''''''''''''''''''''''''''''''''''
+'''Dim $monresultatactivites As Result  ''$mesactivites
+Dim $marequeteactivite As String
+If IsNull($monresultatjointure) Then
+  
+Print "il n'y a aucun resultat dans la jointure"
+''Message.Info("il n'y a aucun résultat dans la jointure")
+resultats.visible = False
+Else
+If $monresultatjointure.count > 0 Then
+  
+Print "il y a " & $monresultatjointure.count & " résultats dans la jointure"
+$marequeteactivite = "where id in ("
+firstone = False
+For Each $res5 In $monresultatjointure.All("activite_id")
+    If firstone Then
+
+      $marequeteactivite = $marequeteactivite & ","
+
+      Else 
+        firstone = True
+  Endif  
+ 
+  $marequeteactivite = $marequeteactivite & $res5
 
 Next
-$mesactivitessql = $mesactivitessql & ")"
-'''Message.info($mesactivitessql)
+  Print "résultat dans la jointure :"
+$marequeteactivite = $marequeteactivite & ")"
+Print $marequeteactivite
 
-End If
- $mesactivites = MODMain.$Con.Find("activites", $mesactivitessql)
- If $mesactivites.count > 0 Then
-   Else 
-     Message.Info("Aucune activité ne correspond à votre recherche")
- Endif
-  
+
+''' opur donner moins de résultats si rechercher par la categorie donne plus de resultats que chercher aussi par le nom ou commune
+'If $usetxt Then
+' $marequeteactivite = $marequeteactivite & $usetxtstr
+'Endif
+'''''''''''''''''''''''
+
+
+$mesactivites = MODMain.$Con.Exec("select * from activites " & $marequeteactivite)
+Print "il y a " & $monresultatjointure.count & " résultats dans la jointure"
+
 Else 
-  Message.Info("sélectionnez une(des) catégorie(s) d'activité")
-  Endif 
-  Else 
-  Message.info("sélectionnez une catégorie d'activité")
+  Print "il n'y a aucun résultat dans la jointure"
+  ''Message.Info("il n'y a aucun résultat dans la jointure")
+resultats.visible = False
+Endif 
 End If
+'''''''''''''''''''''''''''''''''''''''''
+'Else 
+'Print "l'utilisateur n'a cherche aucun type d'activite"
+'Print "les activites sont celles cherchees precedemment avec les champ nom et commune"
+'  Endif
+''''''''''''
+
+''''''''''''''''''''''
+
+
+
+
+
+
+
+''''''''''''''''''''''''''''''''
+
+  
+  
+  If IsNull($mesactivites) Then 
+    Message.info("Aucune activité ne correspond à votre recherche")
+  resultats.visible = False
+ Else If $mesactivites.count = 1 Then
+     resultats.text = "Résultats (1 résultat)"
+   resultats.visible = True
+   listresults.index = 0
+   
+   
+    $nameimg = $mesactivites["photo"]
+    Print "image: "
+    Print $nameimg
+    If $nameimg.len > 0
+    $img = Image.load($nameimg)
+    
+   imageresult.image = $img
+   Endif
+   resulttext.text = $mesactivites["nom"] & " " & $mesactivites["commune"] & " " & $mesactivites["infos"]
+   mycursor.text = "0"
+   suivant.visible = False
+   imageresult.visible = True
+   precedent.visible = False
+   
+   Print $mesactivites
+   Print CStr($mesactivites[2]), CStr($mesactivites[1])
+   Else If $mesactivites.count > 1
+     Dim $myint As Integer
+     Dim myid As Integer
+     Print $mesactivites
+  $myint = 0
+  resultats.text = "Résultats (" & CStr($mesactivites.All("id").Count) & " résultats)"
+  listresults.Clear
+   For Each myid In $mesactivites.All("id")
+     listresults.Add(CStr(myid))
+     
+     $myint = $myint + 1
+   Next
+   listresults.index = 0
+   
+    
+    $nameimg = $mesactivites["photo"]
+    Print $nameimg
+    If $nameimg.len > 0
+    $img = Image.load($nameimg)
+    
+   imageresult.image = $img
+   Endif
+   resulttext.text = $mesactivites["nom"] & " " & $mesactivites["commune"] & " " & $mesactivites["infos"]
+   resultats.visible = True
+   mycursor.text = "0"
+   suivant.visible = True
+   imageresult.visible = True
+   precedent.visible = True
+   
+     Else
+     Message.Info("Aucune activité ne correspond à votre recherche")
+     resultats.visible = False
+ Endif
+
+  
+'''Else 
+  '''Message.Info("sélectionnez une(des) catégorie(s) d'activité")
+  '''Endif 
+  '''Else 
+  '''Message.info("sélectionnez une catégorie d'activité")
+'''End If
 
 
 ''enregistrer des resultats du site
 
 'marquer les resultats sur la carte
 '''
+
 End
 
 Public Sub CheckBox1_Click()
@@ -489,5 +751,67 @@ End
 Public Sub createBtn_Click()
 
   FCreate.Show
+
+End
+
+Public Sub suivant_Click()
+Print "current"
+Print listresults.Current.Text
+Dim $mesactivites As Result
+  If listresults.index = (listresults.list.count - 1) Then
+     listresults.index = 0
+     Else 
+       listresults.index = listresults.index + 1
+   Endif
+
+
+
+ $mesactivites = MODMain.$Con.Exec("select * from activites where id = '" & listresults.text & "'")
+     Dim img As Image
+    Dim nameimg As String
+    nameimg = $mesactivites["photo"]
+    Print nameimg
+    If nameimg.len > 0
+    img = Image.load(nameimg)
+    
+   imageresult.image = img
+   Else 
+     img = Null
+     imageresult.image = Null
+   Endif
+   resulttext.text = $mesactivites["nom"] & " " & $mesactivites["commune"] & " " & $mesactivites["infos"]
+
+End
+
+Public Sub precedent_Click()
+Dim $mesactivites As Result
+Print listresults.selected
+Print "index list results"
+Print listresults.index
+
+Print listresults.list.count
+    If listresults.index = 0 Then
+      
+      Print listresults.list
+     listresults.index = (listresults.list.count - 1)
+     
+     Else 
+       listresults.index = listresults.index - 1
+   Endif
+ 
+ $mesactivites = MODMain.$Con.Exec("select * from activites where id = '" & listresults.text & "'")
+     Dim img As Image
+    Dim nameimg As String
+    nameimg = $mesactivites["photo"]
+    Print nameimg
+    If nameimg.len > 0
+    img = Image.load(nameimg)
+    
+   imageresult.image = img
+   Else 
+     img = Null
+     imageresult.image = Null
+   Endif
+   resulttext.text = $mesactivites["nom"] & " " & $mesactivites["commune"] & " " & $mesactivites["infos"]
 
 End

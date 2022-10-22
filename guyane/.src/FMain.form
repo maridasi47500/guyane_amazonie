@@ -124,4 +124,33 @@
     MoveScaled(64,74,29,8)
     Text = ("Créer une activité")
   }
+  { listresults ComboBox
+    MoveScaled(72,39,7,4)
+    Visible = False
+  }
+  { mycursor Label
+    MoveScaled(70,44,5,4)
+    Visible = False
+  }
+  { resultats Frame
+    MoveScaled(99,70,35,53)
+    Visible = False
+    Text = ("resultats")
+    { imageresult PictureBox
+      MoveScaled(5,5,28,13)
+    }
+    { precedent Button
+      MoveScaled(3,43,9,8)
+      Text = ("<")
+    }
+    { suivant Button suivant
+      Name = "suivant"
+      MoveScaled(22,43,10,7)
+      Text = (">")
+    }
+    { resulttext TextArea
+      MoveScaled(4,20,28,23)
+      ReadOnly = True
+    }
+  }
 }

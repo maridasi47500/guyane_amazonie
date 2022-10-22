@@ -629,14 +629,15 @@ Print "mon sql"
  $Result2 = MODMain.$Con.Exec($sql)
 Dim $rec As Integer
 Dim $myrec As Result
-
+Dim $insertoptions As Result
 Dim $req As String
 $req = "select * from activites where nom = '" & $monnom & "' and commune like '" & $macommune & "' and tarifs like '" & $montarif & "' and infos like '" & $mesinfos & "' and coord like '" & $mescoordonnees & "' and zoom like '" & $monzoom & "' and code_postal like '" & $moncp & "' and photo like '" & $monimg & "'"
 Print $req
  $myrec = MODMain.$Con.Exec($req)
 For Each $rec In $mesresultats.All("id")
   $sql = "insert into mytypes (activite_id,option_id) values ('" & $myrec["id"] & "','" & $rec & "')"
-  
+  $insertoptions = MODMain.$Con.Exec($sql)
+  Print $sql
 Next
 
   Dim iZoom As Integer
