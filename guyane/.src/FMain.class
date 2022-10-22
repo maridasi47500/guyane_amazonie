@@ -829,18 +829,9 @@ Public Sub createBtn_Click()
 
 End
 
-Public Sub suivant_Click()
-Print "current"
-Print listresults.Current.Text
+Public Sub afficher_resultat()
+
 Dim $mesactivites As Result
-  If listresults.index = (listresults.list.count - 1) Then
-     listresults.index = 0
-     Else 
-       listresults.index = listresults.index + 1
-   Endif
-
-
-
  $mesactivites = MODMain.$Con.Exec("select * from activites where id = '" & listresults.text & "'")
      Dim img As Image
     Dim nameimg As String
@@ -856,10 +847,25 @@ Dim $mesactivites As Result
    Endif
    resulttext.text = $mesactivites["nom"] & " " & $mesactivites["commune"] & " " & $mesactivites["infos"]
   affichercarte($mesactivites.All("coord")[0], $mesactivites.All("zoom")[0])
+  
+  
+End
+ 
+Public Sub suivant_Click()
+Print "current"
+Print listresults.Current.Text
+
+  If listresults.index = (listresults.list.count - 1) Then
+     listresults.index = 0
+     Else 
+       listresults.index = listresults.index + 1
+   Endif
+afficher_resultat()
+
 End
 
 Public Sub precedent_Click()
-Dim $mesactivites As Result
+
 Print listresults.selected
 Print "index list results"
 Print listresults.index
@@ -874,19 +880,60 @@ Print listresults.list.count
        listresults.index = listresults.index - 1
    Endif
  
- $mesactivites = MODMain.$Con.Exec("select * from activites where id = '" & listresults.text & "'")
-     Dim img As Image
-    Dim nameimg As String
-    nameimg = $mesactivites["photo"]
-    Print nameimg
-    If nameimg.len > 0
-    img = Image.load(nameimg)
-    
-   imageresult.image = img
-   Else 
-     img = Null
-     imageresult.image = Null
-   Endif
-   resulttext.text = $mesactivites["nom"] & " " & $mesactivites["commune"] & " " & $mesactivites["infos"]
-affichercarte($mesactivites.All("coord")[0], $mesactivites.All("zoom")[0])
+afficher_resultat()
+End
+
+Public Sub supprimerBtn_Click()
+
+  Dim $msg As String
+  Dim $indexitem As Integer
+  Dim $nbitems As Integer
+  Dim $idactivite As Integer
+    Dim $longueurchamp As Integer
+    $idactivite = listresults.text
+  $msg = Message.Question("Êtes vous sûre que vous voulez supprimer cette activité ?", "Oui", "Non")
+  Print "réponse suppression", $msg
+  Select Case $msg
+    Case 1
+      'Message.Info("oui")
+      $indexitem = listresults.index
+      $longueurchamp = listresults.count
+      Print "longueur champ resultats", listresults.count
+   Print "index champ resultats", listresults.index
+      If listresults.count > 0 Then
+      $nbitems = listresults.count - 1
+      Else 
+      $nbitems = 0
+      Endif
+      
+      Print "element selectionne: " & listresults.text
+      listresults.Remove($indexitem)
+      Print "nombre elements dans la liste: " & listresults.count
+      Print "nombre de résultat : " & $nbitems
+      If $longueurchamp > 0 And Not $indexitem = 0 Then
+      listresults.index = $indexitem - 1
+      Else If $nbitems = $indexitem And $longueurchamp > 0 And $indexitem > 0 Then
+        listresults.index = $indexitem - 1
+        Else If $longueurchamp = 1
+          listresults.index = 0
+          Else
+          listresults.index = $indexitem
+        Endif
+        resultats.text = "Résultats (" & CStr($nbitems) & " résultats)" 
+          Dim $mesactivites As Result
+          $mesactivites = MODMain.$Con.Exec("DELETE FROM activites WHERE id = '" & $idactivite & "'")
+          $mesactivites = MODMain.$Con.Exec("DELETE FROM mytypes WHERE activite_id = '" & $idactivite & "'")
+      If listresults.count > 0 Then
+         afficher_resultat()
+      Endif
+      If $nbitems = 1 Then
+        precedent.visible = False
+        suivant.visible = False
+      Else If $nbitems = 0 Then
+        resultats.visible = False
+      Endif
+      Case 2
+    'Message.Info("non")
+  End Select
+
 End

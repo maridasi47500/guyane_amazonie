@@ -1,7 +1,7 @@
 # Gambas Form File 3.0
 
 { Form Form
-  MoveScaled(0,0,151,125)
+  MoveScaled(0,0,151,131)
   Text = ("Guyane amazone")
   Maximized = True
   Sticky = True
@@ -133,24 +133,28 @@
     Visible = False
   }
   { resultats Frame
-    MoveScaled(99,70,35,53)
+    MoveScaled(99,70,35,57)
     Visible = False
     Text = ("resultats")
     { imageresult PictureBox
-      MoveScaled(5,5,28,13)
+      MoveScaled(3,7,28,13)
     }
     { precedent Button
-      MoveScaled(3,43,9,8)
+      MoveScaled(3,48,9,8)
       Text = ("<")
     }
     { suivant Button suivant
       Name = "suivant"
-      MoveScaled(22,43,10,7)
+      MoveScaled(23,48,10,7)
       Text = (">")
     }
     { resulttext TextArea
-      MoveScaled(4,20,28,23)
+      MoveScaled(5,23,28,23)
       ReadOnly = True
+    }
+    { supprimerBtn Button
+      MoveScaled(16,3,18,2)
+      Text = ("Supprimer")
     }
   }
 }
