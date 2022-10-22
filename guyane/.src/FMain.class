@@ -84,6 +84,31 @@ Public Sub MyButton()
   
 End
 
+Public Sub carte_guyane()
+  
+  
+  Dim mp As New MapPoint(3.785, -52.861)   ' Punto 2)
+ ' oppure: mp.Lat = 41.89018
+ '         mp.Lon = 12.49230
+  Dim myshape As Object
+  Dim $shape As String
+  $shape = "P1"
+  myshape = MapView1.Map.GetShape($shape)
+  If Not IsNull(myshape) Then
+  
+    MapView1.Map.Remove($shape)
+    'Print " remove my marker P1"
+
+  Endif
+
+
+  MapView1.Map.DefaultCache = "/home/mary/gambas"
+  MapView1.Map.AddTile("openstreet", "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", Null, "cartes")  ' Punti 4) e 5)
+  MapView1.Map.Zoom = 7          ' Punto 6)
+  MapView1.Map.Center = mp        ' Punto 7)
+  
+  
+End
 
 Public Sub Form_Open()
 
@@ -98,18 +123,7 @@ Dim myargs As Collection
 
 Dim $incr As Integer
 
-
-  Dim mp As New MapPoint(3.785, -52.861)   ' Punto 2)
- ' oppure: mp.Lat = 41.89018
- '         mp.Lon = 12.49230
-
-
-
-  MapView1.Map.DefaultCache = "/home/mary/gambas"
-  MapView1.Map.AddTile("openstreet", "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", Null, "cartes")  ' Punti 4) e 5)
-  MapView1.Map.Zoom = 7          ' Punto 6)
-  MapView1.Map.Center = mp        ' Punto 7)
-  
+carte_guyane()
   
   Dim $table1 As String, $table2 As String, $query22 As String, $query2 As String, $Result2 As Result, $Results2 As Result, $incr6 As Integer
   Dim $myparent As Integer
@@ -727,6 +741,7 @@ End If
   If IsNull($mesactivites) Then 
     Message.info("Aucune activité ne correspond à votre recherche")
   resultats.visible = False
+  carte_guyane()
  Else If $mesactivites.count = 1 Then
      resultats.text = "Résultats (1 résultat)"
    resultats.visible = True
@@ -786,6 +801,7 @@ End If
      Else
      Message.Info("Aucune activité ne correspond à votre recherche")
      resultats.visible = False
+     carte_guyane()
  Endif
 
   
@@ -931,6 +947,7 @@ Public Sub supprimerBtn_Click()
         suivant.visible = False
       Else If $nbitems = 0 Then
         resultats.visible = False
+        carte_guyane()
       Endif
       Case 2
     'Message.Info("non")
