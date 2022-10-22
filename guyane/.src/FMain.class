@@ -7,6 +7,75 @@ Public Sub ok_Click()
 
 End 
 
+Public Sub affichercarte(coord As String, zoom As String)
+Dim lat, lon As String
+Dim latitude, longitude As Float
+
+Dim coor As Integer
+Dim str As String
+coor = 0
+
+For coor = 0 To (coord.len - 1)
+  If coord[coor] = "," Then Break
+    
+    
+    
+Next
+lat = CStr(coord)[0, (coor - 1)]
+lon = CStr(coord)[(coor + 1), (coord.len - 1)]
+Print lat
+Print lon
+Print "coordonées"
+latitude = CFloat(lat)
+longitude = CFloat(lon)
+    Dim mp As New MapPoint(latitude, longitude)   ' Punto 2)
+ ' oppure: mp.Lat = 41.89018
+ '         mp.Lon = 12.49230
+
+''
+  
+    Dim $shape As String
+    Dim $shapeobj As String
+  $shape = "P1" 
+  Dim myshape As Object
+  myshape = MapView1.Map.GetShape($shape)
+  If Not IsNull(myshape) Then
+  
+    MapView1.Map.Remove($shape)
+    'Print " remove my marker P1"
+  
+
+  
+
+  Endif
+    MapView1.Map.AddShape($shape)
+  myshape = MapView1.Map.GetShape($shape)
+    MapView1.Map!P1.AddPoint("Maroni", mp)
+''
+  MapView1.Map.DefaultCache = "/home/mary/gambas"
+  'MapView1.Map.AddTile("openstreet", "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", Null, "cartes")  ' Punti 4) e 5)
+
+
+
+Dim myzoom As Integer
+myzoom = CInt(zoom)  
+Print myzoom, longitude, latitude
+
+
+
+
+    MapView1.Map.Zoom = myzoom       ' Punto 6)
+  MapView1.Map.Center = mp        ' Punto 7)
+ 'MapView1.Map.Center = MapView1.Map!P1!Maroni.Points ' Alternative Zentrierung auf die Marke P1
+MapView1.AllowEffect = True
+  MapView1.SetCenter(mp)
+  MapView1.SetFocus()
+  MapView1.Refresh
+  
+  
+  
+  
+End
 
 
 Public Sub MyButton() 
@@ -18,6 +87,7 @@ End
 
 Public Sub Form_Open()
 
+  
   MODMain.Main()
   Dim test As CheckBox
 Dim tmp As String
@@ -679,7 +749,12 @@ End If
    
    Print $mesactivites
    Print CStr($mesactivites[2]), CStr($mesactivites[1])
+   Print "afficher sur carte"
+   affichercarte($mesactivites.All("coord")[0], $mesactivites.All("zoom")[0])
    Else If $mesactivites.count > 1
+     Print CStr($mesactivites[2]) & CStr($mesactivites[3]) & CStr($mesactivites[4]) & CStr($mesactivites[1]) & CStr($mesactivites[5]) & CStr($mesactivites[6]) & CStr($mesactivites[7])
+     affichercarte($mesactivites.All("coord")[0], $mesactivites.All("zoom")[0])
+   Print "afficher sur carte"
      Dim $myint As Integer
      Dim myid As Integer
      Print $mesactivites
@@ -780,7 +855,7 @@ Dim $mesactivites As Result
      imageresult.image = Null
    Endif
    resulttext.text = $mesactivites["nom"] & " " & $mesactivites["commune"] & " " & $mesactivites["infos"]
-
+  affichercarte($mesactivites.All("coord")[0], $mesactivites.All("zoom")[0])
 End
 
 Public Sub precedent_Click()
@@ -813,5 +888,5 @@ Print listresults.list.count
      imageresult.image = Null
    Endif
    resulttext.text = $mesactivites["nom"] & " " & $mesactivites["commune"] & " " & $mesactivites["infos"]
-
+affichercarte($mesactivites.All("coord")[0], $mesactivites.All("zoom")[0])
 End
